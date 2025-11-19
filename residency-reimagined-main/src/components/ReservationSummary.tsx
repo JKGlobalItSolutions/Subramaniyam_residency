@@ -171,20 +171,24 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
         ipAddress: 'unknown',
       }));
 
-      const response = await fetch(`${apiBase}/bookings`, {
-        method: 'POST',
-        body: formData,
-      });
-
       let confirmationId = generateConfirmationId();
 
-      if (response.ok) {
-        const data = await response.json();
-        confirmationId = data.confirmationId || data.bookingId || data.id || confirmationId;
-      } else {
-        console.log('Backend not available, creating mock booking confirmation');
-        // Backend not available, create a mock confirmation for demo purposes
-        confirmationId = generateConfirmationId();
+      try {
+        const response = await fetch(`${apiBase}/bookings`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          confirmationId = data.confirmationId || data.bookingId || data.id || confirmationId;
+        } else {
+          console.log('Backend not available, creating mock booking confirmation');
+          // Backend not available, create a mock confirmation for demo purposes
+        }
+      } catch (fetchError) {
+        console.log('Network error, using mock booking confirmation:', fetchError);
+        // Network error, use mock confirmation
       }
 
       setBookingId(confirmationId);
