@@ -171,8 +171,6 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
         ipAddress: 'unknown',
       }));
 
-      let confirmationId = generateConfirmationId();
-
       try {
         const response = await fetch(`${apiBase}/bookings`, {
           method: 'POST',
@@ -181,18 +179,19 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
 
         if (response.ok) {
           const data = await response.json();
-          confirmationId = data.confirmationId || data.bookingId || data.id || confirmationId;
+          const confirmationId = data.confirmationId || data.bookingId || data.id || generateConfirmationId();
+          setBookingId(confirmationId);
+          setShowSuccessModal(true);
         } else {
-          console.log('Backend not available, creating mock booking confirmation');
-          // Backend not available, create a mock confirmation for demo purposes
+          console.log('Backend responded with error:', response.status);
+          setErrorMessage('Booking system is currently unavailable. Please contact us directly at +91 9585052446 or subramaniresidency@gmail.com for immediate assistance.');
+          setShowErrorModal(true);
         }
       } catch (fetchError) {
-        console.log('Network error, using mock booking confirmation:', fetchError);
-        // Network error, use mock confirmation
+        console.log('Network error:', fetchError);
+        setErrorMessage('Unable to connect to booking system. Please contact us directly at +91 9585052446 or subramaniresidency@gmail.com to complete your reservation.');
+        setShowErrorModal(true);
       }
-
-      setBookingId(confirmationId);
-      setShowSuccessModal(true);
     } catch (error) {
       let errorMsg = 'There was an error processing your booking. Please try again.';
       if (error instanceof Error) {
