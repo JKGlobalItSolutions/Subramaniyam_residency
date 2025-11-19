@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 270 20% 8%;
+    --background-end: 260 25% 12%;
+    --foreground: 45 85% 95%;
+
+    --card: 275 25% 15%;
+    --card-foreground: 45 85% 95%;
+
+    --popover: 275 25% 15%;
+    --popover-foreground: 45 85% 95%;
+
+    --primary: 280 75% 55%;
+    --primary-glow: 280 85% 65%;
+    --primary-foreground: 45 85% 95%;
+
+    --secondary: 270 15% 20%;
+    --secondary-foreground: 45 85% 95%;
+
+    --muted: 270 10% 25%;
+    --muted-foreground: 45 60% 85%;
+
+    --accent: 45 75% 60%;
+    --accent-foreground: 270 30% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 270 20% 25%;
+    --input: 270 20% 25%;
+    --ring: 280 75% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom gradients */
+    --gradient-royal: linear-gradient(135deg, hsl(280, 75%, 55%), hsl(45, 75%, 60%), hsl(270, 20%, 8%));
+    --gradient-luxury: linear-gradient(180deg, hsl(270, 20%, 8%), hsl(260, 25%, 12%));
+    --glow-purple: 0 0 30px hsl(280 75% 55% / 0.4);
+    --glow-gold: 0 0 30px hsl(45 75% 60% / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply text-foreground;
+    background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--background-end)));
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: var(--gradient-royal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-blue {
+    box-shadow: var(--glow-blue);
+  }
+
+  .glow-accent {
+    box-shadow: var(--glow-accent);
+  }
+
+  .hover-glow-blue {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow-blue:hover {
+    box-shadow: var(--glow-blue);
+    transform: translateY(-2px);
+  }
+
+  .hover-glow-accent {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow-accent:hover {
+    box-shadow: var(--glow-accent);
+    transform: translateY(-2px);
+  }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-reveal.scroll-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-reveal-left.scroll-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-reveal-right.scroll-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
