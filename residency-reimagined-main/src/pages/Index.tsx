@@ -45,86 +45,57 @@ const Index: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-  // Enhanced Preloader
+  // Simplified Preloader
   const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
     const [progress, setProgress] = useState(0);
-    const [currentIcon, setCurrentIcon] = useState(0);
-    const icons = [Leaf, Mountain, Home, Heart];
 
     useEffect(() => {
-      const progressInterval = setInterval(() => {
+      const interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
-            clearInterval(progressInterval);
-            setTimeout(onComplete, 800);
+            clearInterval(interval);
+            setTimeout(onComplete, 500);
             return 100;
           }
-          return prev + 1.5;
+          return prev + 2;
         });
-      }, 30);
+      }, 50);
 
-      const iconInterval = setInterval(() => {
-        setCurrentIcon((prev) => (prev + 1) % icons.length);
-      }, 600);
-
-      return () => {
-        clearInterval(progressInterval);
-        clearInterval(iconInterval);
-      };
-    }, [onComplete, icons.length]);
-
-    const CurrentIcon = icons[currentIcon];
+      return () => clearInterval(interval);
+    }, [onComplete]);
 
     return (
       <motion.div
         initial={{ opacity: 1 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.8 }}
+        exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50"
       >
         <div className="flex flex-col items-center space-y-8">
           <motion.div
-            key={currentIcon}
-            initial={{ scale: 0.5, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0.5, rotate: 180 }}
-            transition={{ duration: 0.6 }}
             className="relative"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
-              <CurrentIcon className="w-10 h-10 text-white" />
+              <Leaf className="w-10 h-10 text-white" />
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="text-center"
-          >
+          <motion.div className="text-center">
             <h1 className="text-3xl font-bold gradient-text mb-2">Subramaniyam Residency</h1>
-            <p className="text-lg text-muted-foreground">Nature's Sanctuary Awaits</p>
+            <p className="text-lg text-gray-600">Nature's Sanctuary Awaits</p>
           </motion.div>
 
           <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-green-400 to-teal-500"
-              initial={{ width: "0%" }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.1 }}
+            <div
+              className="h-full bg-gradient-to-r from-green-400 to-teal-500 transition-all duration-300"
+              style={{ width: `${progress}%` }}
             />
           </div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-sm text-muted-foreground"
-          >
-            {progress < 30 && "Preparing your experience..."}
-            {progress >= 30 && progress < 70 && "Loading natural beauty..."}
-            {progress >= 70 && progress < 100 && "Almost ready..."}
+          <p className="text-sm text-gray-500">
+            {progress < 50 && "Preparing your experience..."}
+            {progress >= 50 && progress < 100 && "Almost ready..."}
             {progress === 100 && "Welcome to paradise!"}
-          </motion.p>
+          </p>
         </div>
       </motion.div>
     );
@@ -483,27 +454,31 @@ const Index: React.FC = () => {
     const spaces = [
       {
         id: 1,
-        name: "Tranquil Suite",
-        icon: Home,
-        features: ["Forest View", "Private Balcony", "Spa Bathroom"],
-        price: "₹2,500/night",
-        description: "Awaken to bird songs and mountain breezes",
+        name: "Family Room",
+        icon: Heart,
+        features: ["King Size Bed (2)", "AC Available", "TV Included", "Sofa"],
+        price: "₹5,000 (AC) / ₹4,000 (Non-AC)",
+        description: "Perfect for families (4 adults + 2 children)",
+        extraBed: "₹500 extra for additional bed",
+        available: 2,
       },
       {
         id: 2,
-        name: "Zen Retreat",
-        icon: Heart,
-        features: ["Meditation Space", "Herbal Garden", "Natural Lighting"],
-        price: "₹3,200/night",
-        description: "Find inner peace in minimalist elegance",
+        name: "Suite Room",
+        icon: Home,
+        features: ["King + Single Bed", "AC Available", "TV Included", "Coffee Maker"],
+        price: "₹4,500 (AC) / ₹3,750 (Non-AC)",
+        description: "Comfort for 3 adults + 1 child",
+        available: 2,
       },
       {
         id: 3,
-        name: "Nature's Haven",
+        name: "Standard Room",
         icon: Leaf,
-        features: ["Wildlife Viewing", "Outdoor Shower", "Organic Bedding"],
-        price: "₹2,800/night",
-        description: "Immerse yourself in natural surroundings",
+        features: ["King Size Bed", "AC Available", "TV Included", "Room Heater"],
+        price: "₹3,000 (AC) / ₹2,500 (Non-AC)",
+        description: "Cozy space for 2 adults + 1 child",
+        available: 18,
       },
     ];
 
@@ -600,12 +575,12 @@ const Index: React.FC = () => {
     const { elementRef: ref, isVisible } = useScrollReveal();
 
     const amenities = [
-      { icon: FaTree, title: "Organic Gardens", description: "Fresh herbs and seasonal produce" },
-      { icon: FaWater, title: "Natural Hot Springs", description: "Therapeutic mineral waters" },
-      { icon: FaMountain, title: "Hiking Trails", description: "Guided nature explorations" },
-      { icon: FaSpa, title: "Wellness Center", description: "Yoga and meditation spaces" },
-      { icon: FaWifi, title: "Forest Network", description: "High-speed connectivity outdoors" },
-      { icon: FaCoffee, title: "Artisan Coffee", description: "Single-origin beans, expertly brewed" },
+      { icon: FaConciergeBell, title: "24/7 Service Desk", description: "Round-the-clock assistance and concierge" },
+      { icon: FaSnowflake, title: "AC/Non-AC Options", description: "Choose comfortable climate control" },
+      { icon: FaMountain, title: "TV in Rooms", description: "Entertainment and local channels" },
+      { icon: FaCoffee, title: "Tea/Coffee Maker", description: "Complimentary hot beverages" },
+      { icon: FaWifi, title: "Free Wi-Fi", description: "High-speed internet throughout property" },
+      { icon: FaSpa, title: "Room Heater", description: "Warm comfort during cool evenings" },
     ];
 
     return (
@@ -678,25 +653,32 @@ const Index: React.FC = () => {
 
     const destinations = [
       {
-        name: "Sacred Mountain",
-        distance: "3 km",
+        name: "Ramanashram",
+        distance: "2 km",
         duration: "2-3 hours",
-        difficulty: "Moderate",
-        highlights: ["Panoramic views", "Spiritual sites", "Photography"],
+        difficulty: "Easy",
+        highlights: ["Spiritual retreat", "Ramana Maharshi teachings", "Peaceful meditation"],
       },
       {
-        name: "Crystal Lake",
-        distance: "8 km",
+        name: "Arunachaleshwarar Temple",
+        distance: "3 km",
+        duration: "3-4 hours",
+        difficulty: "Easy",
+        highlights: ["Ancient temple", "Spiritual significance", "Cultural heritage"],
+      },
+      {
+        name: "Sathanur Dam",
+        distance: "25 km",
         duration: "4-5 hours",
         difficulty: "Easy",
-        highlights: ["Swimming", "Picnic spots", "Wildlife"],
+        highlights: ["Scenic reservoir", "Photography", "Nature walks"],
       },
       {
-        name: "Ancient Grove",
-        distance: "12 km",
-        duration: "6-7 hours",
-        difficulty: "Challenging",
-        highlights: ["Historic ruins", "Meditation", "Adventure"],
+        name: "Kandhashramam",
+        distance: "5 km",
+        duration: "2-3 hours",
+        difficulty: "Moderate",
+        highlights: ["Bird sanctuary", "Nature reserve", "Wildlife viewing"],
       },
     ];
 
