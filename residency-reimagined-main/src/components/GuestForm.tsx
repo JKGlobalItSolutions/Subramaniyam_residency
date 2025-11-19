@@ -1,15 +1,17 @@
 import React from 'react';
 
+type GuestInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  city: string;
+  country: string;
+};
+
 interface GuestFormProps {
-  guestInfo: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    city: string;
-    country: string;
-  };
-  onGuestInfoChange: (info: any) => void;
+  guestInfo: GuestInfo;
+  onGuestInfoChange: (info: GuestInfo) => void;
   paymentProofFile: File | null;
   onPaymentProofChange: (file: File | null) => void;
 }
@@ -124,6 +126,7 @@ const GuestForm: React.FC<GuestFormProps> = ({
               <option value="JP">Japan</option>
               <option value="SG">Singapore</option>
               <option value="AE">United Arab Emirates</option>
+              <option value="OTHERS">Others</option>
             </select>
           </div>
 

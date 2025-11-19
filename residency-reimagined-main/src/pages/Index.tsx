@@ -520,7 +520,7 @@ const Index: React.FC = () => {
                   key={space.id}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: spacesVisible ? 1 : 0, y: spacesVisible ? 0 : 50 }}
-                  transition={{ delay: index * 0.2, duration: 0.8 }}
+                  transition={{ delay: index * 0.2, duration: 0.2 }}
                   whileHover={{ y: -10 }}
                   className="card-hover group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-green-300 transition-all duration-500 shadow-lg hover:shadow-2xl"
                 >
@@ -1051,7 +1051,7 @@ const Index: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-
+                {/* Need to delete this entire support stuffs */}
                 <div>
                   <h4 className="text-lg font-semibold mb-4">Support</h4>
                   <ul className="space-y-2">
@@ -1065,7 +1065,7 @@ const Index: React.FC = () => {
 
               <div className="border-t border-gray-700 pt-8 text-center mt-12">
                 <p className="text-gray-400">
-                  © 2025 Subramaniyam Residency. Embracing nature's beauty, one guest at a time.
+                  © 2025 Subramaniyam Residency. All rights reserved.
                 </p>
               </div>
             </div>

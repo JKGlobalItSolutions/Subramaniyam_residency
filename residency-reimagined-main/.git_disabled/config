@@ -6,8 +6,9 @@
 	symlinks = false
 	ignorecase = true
 [remote "origin"]
-	url = https://github.com/JKGlobalItSolutions/Subramaniyam_residency.git
+	url = https://github.com/Gokulv21/Subramaniyam-residency.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "main"]
 	remote = origin
 	merge = refs/heads/main
+	vscode-merge-base = origin/main
