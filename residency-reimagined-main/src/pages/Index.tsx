@@ -879,8 +879,7 @@ const Index: React.FC = () => {
 
   // Contact Section
   const Contact: React.FC = () => {
-    const { elementRef: ref, isVisible } = useScrollReveal();
-    const [showForm, setShowForm] = useState(false);
+    const [showContact, setShowContact] = useState(false);
 
     return (
       <section id="contact" className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
@@ -903,7 +902,7 @@ const Index: React.FC = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowForm(!showForm)}
+                onClick={() => setShowContact(!showContact)}
                 className="btn-primary px-8 py-4 text-lg"
               >
                 Connect With Us
@@ -912,43 +911,79 @@ const Index: React.FC = () => {
           </motion.div>
 
           <AnimatePresence>
-            {showForm && (
+            {showContact && (
               <motion.div
-                ref={ref}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={isVisible ? { opacity: 1, y: 0, scale: 1 } : {}}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 50, scale: 0.9 }}
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200"
               >
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Let's Get In Touch</h3>
-                  <p className="text-gray-600">We're here to make your experience extraordinary</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Contact Information</h3>
+                  <p className="text-gray-600">Reach out to us through any of these channels</p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8 text-center">
-                  <div className="flex flex-col items-center">
+                  {/* Address */}
+                  <div className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
-                      <Phone className="w-6 h-6 text-green-600" />
+                      <MapPin className="w-6 h-6 text-green-600" />
                     </div>
-                    <h4 className="font-semibold mb-1">Call Us</h4>
-                    <p className="text-gray-600 text-sm">+91 98765 43210</p>
+                    <h4 className="font-semibold mb-3">Address</h4>
+                    <a
+                      href="https://www.google.com/maps/dir/?api=1&destination=107,+Ramalinganar+St,+Tiruvennanallur,+Tiruvannamalai,+Tamil+Nadu+606601"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm break-words hover:underline transition-colors"
+                    >
+                      107, Ramalinganar St,<br />Tiruvennanallur,<br />Tiruvannamalai,<br />Tamil Nadu 606601
+                    </a>
+                    <p className="text-xs text-gray-500 mt-2">Click to get directions</p>
                   </div>
 
-                  <div className="flex flex-col items-center">
+                  {/* Phone */}
+                  <div className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                      <Mail className="w-6 h-6 text-blue-600" />
+                      <Phone className="w-6 h-6 text-blue-600" />
                     </div>
-                    <h4 className="font-semibold mb-1">Email Us</h4>
-                    <p className="text-gray-600 text-sm">hello@subramaniyam.com</p>
+                    <h4 className="font-semibold mb-3">Phone Number</h4>
+                    <a
+                      href="tel:9585052446"
+                      className="text-blue-600 hover:text-blue-800 text-lg font-medium hover:underline transition-colors"
+                    >
+                      9585052446
+                    </a>
+                    <p className="text-xs text-gray-500 mt-2">Click to call</p>
                   </div>
 
-                  <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-3">
-                      <MapPin className="w-6 h-6 text-teal-600" />
+                  {/* Email */}
+                  <div className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-3">
+                      <Mail className="w-6 h-6 text-purple-600" />
                     </div>
-                    <h4 className="font-semibold mb-1">Visit Us</h4>
-                    <p className="text-gray-600 text-sm">Tiruvannamalai, TN</p>
+                    <h4 className="font-semibold mb-3">Email</h4>
+                    <a
+                      href="mailto:subramaniresidency@gmail.com"
+                      className="text-blue-600 hover:text-blue-800 text-sm break-words hover:underline transition-colors"
+                    >
+                      subramaniresidency<br />@gmail.com
+                    </a>
+                    <p className="text-xs text-gray-500 mt-2">Click to send email</p>
+                  </div>
+                </div>
+
+                {/* Additional Contact Info */}
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <div className="grid md:grid-cols-2 gap-6 text-center">
+                    <div>
+                      <p className="text-gray-600 mb-2">For reservations and inquiries:</p>
+                      <p className="text-sm text-gray-800">24/7 available</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 mb-2">Response time:</p>
+                      <p className="text-sm text-gray-800">Within 24 hours</p>
+                    </div>
                   </div>
                 </div>
               </motion.div>
