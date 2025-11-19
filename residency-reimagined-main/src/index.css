@@ -1,10 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Complete redesign with modern green/nature theme */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -78,11 +78,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+    @apply bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
   }
 
   .btn-secondary {
-    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-300;
+    @apply border-2 border-green-500 text-green-600 hover:bg-green-500 hover:text-white px-6 py-3 rounded-lg font-medium transition-all duration-300;
   }
 
   .card-hover {
@@ -91,6 +91,25 @@
 
   .text-shadow {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Fix gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(162, 76%, 45%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+
+  /* Fix glow animations */
+  .hover-glow-purple, .hover-glow-blue, .hover-glow-accent {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow-purple:hover, .hover-glow-blue:hover, .hover-glow-accent:hover {
+    box-shadow: 0 0 20px hsl(142 76% 36% / 0.3);
+    transform: translateY(-2px);
   }
 }
 

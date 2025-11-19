@@ -682,79 +682,156 @@ const Index: React.FC = () => {
       },
     ];
 
-    return (
-      <section className="py-24 px-6 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
-              <Mountain className="w-4 h-4 mr-2" />
-              Nature Adventures
-            </div>
-
-            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Explore Beyond <span className="gradient-text">Boundaries</span>
-            </h2>
-
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover the natural wonders and spiritual landmarks that surround our sanctuary.
-            </p>
-          </motion.div>
-
-          <div ref={ref} className="grid md:grid-cols-3 gap-8">
-            {destinations.map((dest, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: index * 0.2, duration: 0.8 }}
-                className="relative group"
-              >
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-gray-200 hover:border-blue-300 transition-all duration-500 card-hover">
-                  <div className="text-center mb-6">
-                    <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
-                      dest.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
-                      dest.difficulty === 'Moderate' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-red-100 text-red-700'
-                    }`}>
-                      {dest.difficulty}
+            return (
+              <section id="tours" className="py-24 px-6 bg-white">
+                <div className="container mx-auto max-w-6xl">
+                  {/* Exploration Section */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16"
+                  >
+                    <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
+                      <Mountain className="w-4 h-4 mr-2" />
+                      Nature Adventures
                     </div>
 
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{dest.name}</h3>
-                    <div className="flex justify-between text-sm text-gray-600 mb-4">
-                      <span>{dest.distance}</span>
-                      <span>{dest.duration}</span>
-                    </div>
-                  </div>
+                    <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                      Explore Beyond <span className="gradient-text">Boundaries</span>
+                    </h2>
 
-                  <div className="space-y-3 mb-6">
-                    <p className="font-semibold text-gray-900 mb-2">Highlights:</p>
-                    {dest.highlights.map((highlight, i) => (
-                      <div key={i} className="flex items-center space-x-2 text-sm text-gray-700">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>{highlight}</span>
-                      </div>
+                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                      Discover the natural wonders and spiritual landmarks that surround our sanctuary.
+                    </p>
+                  </motion.div>
+
+                  <div ref={ref} className="grid md:grid-cols-2 gap-8 mb-16">
+                    {destinations.map((dest, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                        transition={{ delay: index * 0.2, duration: 0.8 }}
+                        className="relative group"
+                      >
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-gray-200 hover:border-blue-300 transition-all duration-500 card-hover">
+                          <div className="text-center mb-6">
+                            <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
+                              dest.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                              dest.difficulty === 'Moderate' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {dest.difficulty}
+                            </div>
+
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">{dest.name}</h3>
+                            <div className="flex justify-between text-sm text-gray-600 mb-4">
+                              <span>{dest.distance}</span>
+                              <span>{dest.duration}</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-3 mb-6">
+                            <p className="font-semibold text-gray-900 mb-2">Highlights:</p>
+                            {dest.highlights.map((highlight, i) => (
+                              <div key={i} className="flex items-center space-x-2 text-sm text-gray-700">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                <span>{highlight}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
 
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-medium"
-                  >
-                    Learn More
-                  </motion.button>
+                  {/* Contact Details in Tours Section */}
+                  <div className="grid md:grid-cols-2 gap-8 mt-16">
+                    {/* Map */}
+                    <div className="bg-gray-50 rounded-2xl p-6">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Location</h3>
+                      <div className="rounded-lg overflow-hidden h-80">
+                        <iframe
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3604.8010846062!2d79.07197797469352!3d12.229460588021807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bacc177aa9554ab%3A0xcf9414977c2c1018!2sSiva%20Subramaniyar%20Residency!5e1!3m2!1sen!2sin!4v1763541794615!5m2!1sen!2sin"
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                        />
+                      </div>
+
+                      <div className="mt-4">
+                        <h4 className="font-semibold text-gray-900 mb-1">Address</h4>
+                        <p className="text-gray-600 text-sm">
+                          107, Ramalinganar St, Tiruvennanallur,<br />
+                          Tiruvannamalai, Tamil Nadu 606601
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Contact Form */}
+                    <div className="bg-white rounded-2xl p-6 border border-gray-200">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h3>
+                      <form className="space-y-4">
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <input
+                            type="text"
+                            placeholder="Your Name"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+                          />
+                          <input
+                            type="email"
+                            placeholder="Your Email"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+                          />
+                        </div>
+
+                        <input
+                          type="tel"
+                          placeholder="Phone Number"
+                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+                        />
+
+                        <select className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+                          <option>Select Room Type</option>
+                          <option>Family Room</option>
+                          <option>Suite Room</option>
+                          <option>Standard Room</option>
+                        </select>
+
+                        <textarea
+                          rows={4}
+                          placeholder="Your Message"
+                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors resize-none"
+                        />
+
+                        <button
+                          type="submit"
+                          className="w-full btn-primary py-3"
+                        >
+                          Send Message
+                        </button>
+                      </form>
+
+                      {/* Contact Info */}
+                      <div className="mt-6 pt-6 border-t border-gray-200">
+                        <div className="flex items-center mb-3">
+                          <Phone className="w-5 h-5 text-green-600 mr-3" />
+                          <span className="text-gray-700">+91 98765 43210</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Mail className="w-5 h-5 text-green-600 mr-3" />
+                          <span className="text-gray-700">subramaniresidency@gmail.com</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+              </section>
+            );
   };
 
   // Gallery Section

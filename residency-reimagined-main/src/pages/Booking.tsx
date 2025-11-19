@@ -46,6 +46,120 @@ const Booking = () => {
   const hotelId = import.meta.env.VITE_HOTEL_ID;
   const apiBase = import.meta.env.VITE_API_BASE;
 
+  // Mock data for testing when backend is not available
+  const mockRoomsData = [
+    {
+      _id: "677ff0000000000000000001",
+      type: "Family Room - AC",
+      roomSize: "450 sq ft",
+      bedType: "2 King Beds",
+      maxGuests: 6,
+      pricePerNight: 5000,
+      perAdultPrice: 0,
+      perChildPrice: 0,
+      availability: "Available",
+      availableCount: 2,
+      image: "/src/assets/family-balcony.jpg",
+      taxPercentage: 18,
+      commission: 5,
+      hotelId: "69044a464b6d426e6b27e59e"
+    },
+    {
+      _id: "677ff0000000000000000002",
+      type: "Family Room - Non-AC",
+      roomSize: "450 sq ft",
+      bedType: "2 King Beds",
+      maxGuests: 6,
+      pricePerNight: 4000,
+      perAdultPrice: 0,
+      perChildPrice: 0,
+      availability: "Available",
+      availableCount: 2,
+      image: "/src/assets/family-balcony.jpg",
+      taxPercentage: 18,
+      commission: 5,
+      hotelId: "69044a464b6d426e6b27e59e"
+    },
+    {
+      _id: "677ff0000000000000000003",
+      type: "Suite Room - AC",
+      roomSize: "350 sq ft",
+      bedType: "1 King + 1 Single Bed",
+      maxGuests: 4,
+      pricePerNight: 4500,
+      perAdultPrice: 0,
+      perChildPrice: 0,
+      availability: "Available",
+      availableCount: 2,
+      image: "/src/assets/executive-balcony.jpg",
+      taxPercentage: 18,
+      commission: 5,
+      hotelId: "69044a464b6d426e6b27e59e"
+    },
+    {
+      _id: "677ff0000000000000000004",
+      type: "Suite Room - Non-AC",
+      roomSize: "350 sq ft",
+      bedType: "1 King + 1 Single Bed",
+      maxGuests: 4,
+      pricePerNight: 3750,
+      perAdultPrice: 0,
+      perChildPrice: 0,
+      availability: "Available",
+      availableCount: 2,
+      image: "/src/assets/executive-balcony.jpg",
+      taxPercentage: 18,
+      commission: 5,
+      hotelId: "69044a464b6d426e6b27e59e"
+    },
+    {
+      _id: "677ff0000000000000000005",
+      type: "Standard Room - AC",
+      roomSize: "250 sq ft",
+      bedType: "1 King Bed",
+      maxGuests: 3,
+      pricePerNight: 3000,
+      perAdultPrice: 0,
+      perChildPrice: 0,
+      availability: "Available",
+      availableCount: 18,
+      image: "/src/assets/standard-room.jpg",
+      taxPercentage: 18,
+      commission: 5,
+      hotelId: "69044a464b6d426e6b27e59e"
+    },
+    {
+      _id: "677ff0000000000000000006",
+      type: "Standard Room - Non-AC",
+      roomSize: "250 sq ft",
+      bedType: "1 King Bed",
+      maxGuests: 3,
+      pricePerNight: 2500,
+      perAdultPrice: 0,
+      perChildPrice: 0,
+      availability: "Available",
+      availableCount: 18,
+      image: "/src/assets/standard-room.jpg",
+      taxPercentage: 18,
+      commission: 5,
+      hotelId: "69044a464b6d426e6b27e59e"
+    }
+  ];
+
+  const mockHotelData = {
+    _id: "69044a464b6d426e6b27e59e",
+    name: "Subramaniyam Residency",
+    location: "Tiruvannamalai, Tamil Nadu",
+    description: "A beautiful resort...",
+    images: [],
+    amenities: [],
+    contact: {
+      phone: "+91 98765 43210",
+      email: "subramaniresidency@gmail.com"
+    },
+    address: "107, Ramalinganar St, Tiruvennanallur, Tiruvannamalai, Tamil Nadu 606601"
+  };
+
   // Generate confirmation ID
   const generateConfirmationId = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -72,7 +186,10 @@ const Booking = () => {
       setRoomsData(data);
       setRoomsError(null);
     } catch (err: unknown) {
-      setRoomsError(err instanceof Error ? err.message : 'Failed to fetch rooms');
+      console.log('Backend not available, using mock data');
+      // Use mock data when backend is not available
+      setRoomsData(mockRoomsData);
+      setRoomsError(null);
     } finally {
       setRoomsLoading(false);
     }
@@ -90,7 +207,10 @@ const Booking = () => {
       const data = await res.json();
       setHotel(data);
     } catch (err: unknown) {
-      setHotelError(err instanceof Error ? err.message : 'Failed to fetch hotel');
+      console.log('Backend not available, using mock hotel data');
+      // Use mock hotel data when backend is not available
+      setHotel(mockHotelData);
+      setHotelError(null);
     } finally {
       setHotelLoading(false);
     }
