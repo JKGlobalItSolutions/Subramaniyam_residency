@@ -2,49 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Complete redesign with modern green/nature theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 270 20% 8%;
-    --background-end: 260 25% 12%;
-    --foreground: 45 85% 95%;
+    /* Modern light theme with nature greens */
+    --background: 120 40% 98%;
+    --background-secondary: 120 20% 96%;
+    --foreground: 120 10% 15%;
 
-    --card: 275 25% 15%;
-    --card-foreground: 45 85% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 120 10% 15%;
 
-    --popover: 275 25% 15%;
-    --popover-foreground: 45 85% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 10% 15%;
 
-    --primary: 280 75% 55%;
-    --primary-glow: 280 85% 65%;
-    --primary-foreground: 45 85% 95%;
+    --primary: 142 76% 36%;
+    --primary-hover: 142 76% 30%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 15% 20%;
-    --secondary-foreground: 45 85% 95%;
+    --secondary: 120 14% 90%;
+    --secondary-foreground: 120 10% 25%;
 
-    --muted: 270 10% 25%;
-    --muted-foreground: 45 60% 85%;
+    --muted: 120 14% 94%;
+    --muted-foreground: 120 10% 45%;
 
-    --accent: 45 75% 60%;
-    --accent-foreground: 270 30% 8%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 270 20% 25%;
-    --input: 270 20% 25%;
-    --ring: 280 75% 55%;
+    --border: 120 14% 85%;
+    --input: 120 14% 95%;
+    --ring: 142 76% 36%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Custom gradients */
-    --gradient-royal: linear-gradient(135deg, hsl(280, 75%, 55%), hsl(45, 75%, 60%), hsl(270, 20%, 8%));
-    --gradient-luxury: linear-gradient(180deg, hsl(270, 20%, 8%), hsl(260, 25%, 12%));
-    --glow-purple: 0 0 30px hsl(280 75% 55% / 0.4);
-    --glow-gold: 0 0 30px hsl(45 75% 60% / 0.4);
+    /* Modern nature-themed gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(162, 76%, 45%), hsl(182, 76%, 40%));
+    --gradient-secondary: linear-gradient(135deg, hsl(120, 40%, 98%), hsl(120, 20%, 96%));
+    --gradient-text: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(162, 76%, 45%));
+    --gradient-card: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(120, 14%, 98%));
+
+    /* Modern glows */
+    --glow-primary: 0 0 20px hsl(142 76% 36% / 0.3);
+    --glow-accent: 0 0 15px hsl(162 76% 45% / 0.2);
   }
 }
 
@@ -53,19 +58,117 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply text-foreground;
-    background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--background-end)));
+    @apply text-foreground font-['Inter'] antialiased;
+    background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--background-secondary)));
     background-attachment: fixed;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply transition-all duration-500 hover:shadow-2xl hover:scale-105 hover:-translate-y-2;
+  }
+
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   }
 }
 
 @layer utilities {
   .gradient-text {
-    background: var(--gradient-royal);
+    background: var(--gradient-text);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 700;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-bounce-gentle {
+    animation: bounceGentle 2s infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes bounceGentle {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
   }
 
   .glow-blue {

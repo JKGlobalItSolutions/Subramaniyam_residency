@@ -1,44 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
-import { X } from "lucide-react";
-import { FaWifi, FaParking, FaSnowflake, FaUtensils, FaCoffee, FaDumbbell, FaSwimmingPool, FaConciergeBell, FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaBuilding, FaChurch, FaSkyatlas, FaGopuram, FaCar, FaBroom } from "react-icons/fa";
+import { X, Leaf, Mountain, Home, Star, ArrowRight, CheckCircle, Menu, Phone, Mail, MapPin, Heart, Wind, Sun, Moon, Waves } from "lucide-react";
+import { FaWifi, FaSnowflake, FaUtensils, FaCoffee, FaConciergeBell, FaPhone, FaEnvelope, FaMapMarkerAlt, FaTree, FaWater, FaMountain, FaSpa } from "react-icons/fa";
 
-import hero1 from "@/assets/hero-1.jpeg";
-import hero2 from "@/assets/hero-2.jpeg";
-import deluxeBalcony from "@/assets/deluxe-balcony.jpeg";
-import deluxeBalcony2 from "@/assets/deluxe-balcony-2.jpg";
-import deluxeBalcony3 from "@/assets/deluxe-balcony-3.jpeg";
-import deluxeBalcony4 from "@/assets/deluxe-balcony-4.jpg";
-import deluxeBalcony5 from "@/assets/deluxe-balcony-5.jpg";
-import executiveBalcony from "@/assets/executive-balcony.jpeg";
-import executiveBalcony2 from "@/assets/executive-balcony-2.jpeg";
-import executiveBalcony3 from "@/assets/executive-balcony-3.jpeg";
-import executiveBalcony4 from "@/assets/executive-balcony-4.jpeg";
-import executiveBalcony5 from "@/assets/executive-balcony-5.jpg";
-import familyBalcony from "@/assets/family-balcony.jpg";
-import familyBalcony2 from "@/assets/family-balcony-2.jpg";
-import familyBalcony3 from "@/assets/family-balcony-3.jpg";
-import familyBalcony4 from "@/assets/family-balcony-4.jpg";
-import familyBalcony5 from "@/assets/family-balcony-5.jpg";
-import presidentialBalcony from "@/assets/presidential-balcony.jpg";
-import presidentialBalcony2 from "@/assets/presidential-balcony-2.jpg";
-import presidentialBalcony3 from "@/assets/presidential-balcony-3.jpg";
-import presidentialBalcony4 from "@/assets/presidential-balcony-4.jpg";
-import presidentialBalcony5 from "@/assets/presidential-balcony-5.jpg";
-import standardRoom from "@/assets/standard-room.jpg";
-import standardRoom2 from "@/assets/standard-room-2.jpg";
-import standardRoom3 from "@/assets/standard-room-3.jpg";
-import standardRoom4 from "@/assets/standard-room-4.jpg";
-import standardRoom5 from "@/assets/standard-room-5.jpg";
-import economyRoom from "@/assets/economy-room.jpg";
-import economyRoom2 from "@/assets/economy-room-2.jpg";
-import economyRoom3 from "@/assets/economy-room-3.jpg";
-import economyRoom4 from "@/assets/economy-room-4.jpg";
-import economyRoom5 from "@/assets/economy-room-5.jpg";
-
-// Simple in-file replacement for ../hooks/useScrollReveal
+// Type definitions
 type UseScrollRevealOptions = {
   threshold?: number;
   root?: Element | null;
@@ -73,580 +40,630 @@ const useScrollReveal = (options?: UseScrollRevealOptions) => {
   return { elementRef: elementRef as React.RefObject<HTMLDivElement>, isVisible };
 };
 
-// Simple inline RoomCarousel component to avoid external module resolution issues
-const RoomCarousel = ({ images, roomName }: { images: string[]; roomName: string }) => {
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (!images || images.length === 0) return;
-    const id = setInterval(() => setCurrent((c) => (c + 1) % images.length), 4000);
-    return () => clearInterval(id);
-  }, [images]);
-
-  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
-  const next = () => setCurrent((c) => (c + 1) % images.length);
-
-  return (
-    <div className="relative h-64">
-      <img
-        src={images[current]}
-        alt={roomName}
-        className="w-full h-64 object-cover rounded-t-lg"
-      />
-      <div className="absolute inset-0 flex items-center justify-between px-2">
-        <button
-          type="button"
-          onClick={prev}
-          className="p-2 bg-black/30 text-white rounded-full focus:outline-none"
-        >
-          ‹
-        </button>
-        <button
-          type="button"
-          onClick={next}
-          className="p-2 bg-black/30 text-white rounded-full focus:outline-none"
-        >
-          ›
-        </button>
-      </div>
-      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
-        {images.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => setCurrent(i)}
-            className={`w-2 h-2 rounded-full ${current === i ? "bg-accent" : "bg-white/50"}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Index = () => {
+const Index: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
-  // Preloader Component
-  const Preloader = ({ onComplete }: { onComplete: () => void }) => {
+  // Enhanced Preloader
+  const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
     const [progress, setProgress] = useState(0);
+    const [currentIcon, setCurrentIcon] = useState(0);
+    const icons = [Leaf, Mountain, Home, Heart];
 
     useEffect(() => {
-      const interval = setInterval(() => {
+      const progressInterval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(onComplete, 500);
+            clearInterval(progressInterval);
+            setTimeout(onComplete, 800);
             return 100;
           }
-          return prev + 2;
+          return prev + 1.5;
         });
       }, 30);
 
-      return () => clearInterval(interval);
-    }, [onComplete]);
+      const iconInterval = setInterval(() => {
+        setCurrentIcon((prev) => (prev + 1) % icons.length);
+      }, 600);
+
+      return () => {
+        clearInterval(progressInterval);
+        clearInterval(iconInterval);
+      };
+    }, [onComplete, icons.length]);
+
+    const CurrentIcon = icons[currentIcon];
 
     return (
       <motion.div
         initial={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-        style={{
-          background: "linear-gradient(180deg, hsl(240, 25%, 6%), hsl(240, 43%, 10%))",
-        }}
+        exit={{ opacity: 0, y: -50 }}
+        transition={{ duration: 0.8 }}
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50"
       >
+        <div className="flex flex-col items-center space-y-8">
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
+            key={currentIcon}
+            initial={{ scale: 0.5, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0.5, rotate: 180 }}
+            transition={{ duration: 0.6 }}
+            className="relative"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 gradient-text">
-              Subramaniyam Residency
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8">Welcome to Luxury</p>
-
-            <div className="relative w-24 h-24 mx-auto mb-6">
-              <svg
-                className="w-24 h-24 transform -rotate-90"
-                viewBox="0 0 100 100"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  stroke="currentColor"
-                  strokeWidth="8"
-                  fill="none"
-                  className="text-muted opacity-20"
-                />
-                <motion.circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  stroke="url(#gradient-gold-blue)"
-                  strokeWidth="8"
-                  fill="none"
-                  strokeLinecap="round"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: progress / 100 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  style={{
-                    strokeDasharray: 283,
-                    strokeDashoffset: 283 * (1 - progress / 100)
-                  }}
-                />
-                <defs>
-                  <linearGradient id="gradient-gold-blue" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" />
-                    <stop offset="100%" stopColor="hsl(var(--accent))" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold gradient-text">{progress}%</span>
-              </div>
+            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
+              <CurrentIcon className="w-10 h-10 text-white" />
             </div>
           </motion.div>
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="text-center"
+          >
+            <h1 className="text-3xl font-bold gradient-text mb-2">Subramaniyam Residency</h1>
+            <p className="text-lg text-muted-foreground">Nature's Sanctuary Awaits</p>
+          </motion.div>
+
+          <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-green-400 to-teal-500"
+              initial={{ width: "0%" }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.1 }}
+            />
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-sm text-muted-foreground"
+          >
+            {progress < 30 && "Preparing your experience..."}
+            {progress >= 30 && progress < 70 && "Loading natural beauty..."}
+            {progress >= 70 && progress < 100 && "Almost ready..."}
+            {progress === 100 && "Welcome to paradise!"}
+          </motion.p>
+        </div>
       </motion.div>
     );
   };
 
-  // Navigation Component
-  const Navigation = () => {
+  // Modern Navigation
+  const Navigation: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-      const handleScroll = () => {
-        setScrolled(window.scrollY > 50);
-      };
+      const handleScroll = () => setScrolled(window.scrollY > 20);
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const scrollToSection = (id: string) => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        setMobileMenuOpen(false);
-      }
-    };
-
     const navItems = [
-      { label: "Home", id: "hero" },
-      { label: "Rooms", id: "rooms" },
-      { label: "Amenities", id: "amenities" },
-      { label: "Tours", id: "tours" },
+      { label: "Discover", id: "hero" },
+      { label: "Spaces", id: "spaces" },
+      { label: "Essence", id: "amenities" },
+      { label: "Exploration", id: "tours" },
       { label: "Gallery", id: "gallery" },
-      { label: "Contact", id: "contact" },
+      { label: "Connect", id: "contact" },
     ];
 
     return (
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled ? "bg-card/95 backdrop-blur-lg shadow-lg" : "bg-transparent"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? "bg-white/80 backdrop-blur-xl shadow-lg border-b border-gray-100"
+            : "bg-transparent"
         }`}
       >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="text-2xl font-bold gradient-text cursor-pointer"
-              onClick={() => scrollToSection("hero")}
+              className="flex items-center space-x-3 cursor-pointer"
             >
-              Subramaniyam Residency
+              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center">
+                <Leaf className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-semibold gradient-text">Subramaniyam</span>
             </motion.div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
-                <button
+                <motion.button
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="text-foreground hover:text-accent transition-colors duration-300 relative group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
+                  className="text-gray-700 hover:text-green-600 transition-colors duration-300 relative group font-medium"
                 >
                   {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full" />
-                </button>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-500 to-teal-500 transition-all duration-300 group-hover:w-full rounded-full" />
+                </motion.button>
               ))}
-              <button
-                onClick={() => scrollToSection("rooms")}
-                className="bg-primary hover:bg-primary-glow text-primary-foreground hover-glow-blue px-6 py-3 rounded-lg transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById("spaces")?.scrollIntoView({ behavior: "smooth" })}
+                className="btn-primary shadow-lg hover:shadow-xl"
               >
                 Book Now
-              </button>
+              </motion.button>
             </div>
 
-            {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-foreground"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                {mobileMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
+              <Menu className="w-6 h-6 text-gray-700" />
             </button>
           </div>
+        </div>
 
-          {/* Mobile Menu */}
+        {/* Mobile Menu */}
+        <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden pb-4"
+              transition={{ duration: 0.3 }}
+              className="md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200"
             >
-              {navItems.map((item) => (
+              <div className="px-6 py-4 space-y-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left py-2 text-gray-700 hover:text-green-600 transition-colors font-medium"
+                  >
+                    {item.label}
+                  </button>
+                ))}
                 <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="block w-full text-left py-2 text-foreground hover:text-accent transition-colors"
+                  onClick={() => {
+                    document.getElementById("spaces")?.scrollIntoView({ behavior: "smooth" });
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full btn-primary mt-4"
                 >
-                  {item.label}
+                  Book Now
                 </button>
-              ))}
-              <button
-                onClick={() => scrollToSection("rooms")}
-                className="w-full bg-primary hover:bg-primary-glow text-primary-foreground px-4 py-3 rounded-lg transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                Book Now
-              </button>
+              </div>
             </motion.div>
           )}
-        </div>
+        </AnimatePresence>
       </motion.nav>
     );
   };
 
-  // Hero Component
-  const Hero = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+  // Unique Hero Section
+  const Hero: React.FC = () => {
+    const [activeSlide, setActiveSlide] = useState(0);
     const slides = [
       {
-        image: hero1,
-        title: "Discover Timeless Elegance",
-        subtitle: "Where Heritage Meets Luxury - A Sanctuary of Tranquility & Grace",
+        title: "Embrace Nature's Embrace",
+        subtitle: "Where every breath is fresh, every moment is peace",
+        image: "bg-gradient-to-br from-green-200 via-teal-100 to-cyan-200",
       },
       {
-        image: hero2,
-        title: "Refined Perfection",
-        subtitle: "Experience Unparalleled Hospitality in the Heart of Spirituality",
+        title: "Serene Sanctuary",
+        subtitle: "Your personal retreat from the world's chaos",
+        image: "bg-gradient-to-br from-teal-200 via-cyan-100 to-blue-200",
       },
     ];
 
     useEffect(() => {
       const interval = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-      }, 5000);
+        setActiveSlide((prev) => (prev + 1) % slides.length);
+      }, 6000);
       return () => clearInterval(interval);
-    }, [slides.length]);
-
-    const scrollToSection = (id: string) => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    };
+    }, []);
 
     return (
-      <section id="hero" className="relative h-screen w-full overflow-hidden">
-        {slides.map((slide, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: currentSlide === index ? 1 : 0,
-              scale: currentSlide === index ? 1 : 1.1,
-            }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url(${slide.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            <div className="absolute inset-0 bg-black/50" />
-          </motion.div>
-        ))}
-
-        <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            <motion.h1
-              key={currentSlide}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-5xl md:text-7xl font-bold mb-4 gradient-text"
-            >
-              {slides[currentSlide].title}
-            </motion.h1>
-            <motion.p
-              key={`subtitle-${currentSlide}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-xl md:text-2xl text-foreground mb-8"
-            >
-              {slides[currentSlide].subtitle}
-            </motion.p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => scrollToSection("rooms")}
-                className="bg-primary hover:bg-primary-glow text-primary-foreground hover-glow-purple text-lg px-8 py-6 rounded-md transition-all duration-300"
-              >
-                Explore Rooms
-              </button>
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="border-accent text-accent hover:bg-accent hover:text-accent-foreground text-lg px-8 py-6 rounded-md transition-all duration-300 border"
-              >
-                Contact Us
-              </button>
-            </div>
-          </motion.div>
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 animate-pulse-slow">
+          <div className={slides[activeSlide].image} />
         </div>
 
-        {/* Slide Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentSlide === index ? "bg-accent w-8" : "bg-foreground/50"
-              }`}
-            />
+        {/* Floating Elements */}
+        <div className="absolute inset-0">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute opacity-20"
+              animate={{
+                y: [0, -20, 0],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                duration: 4 + i,
+                repeat: Infinity,
+                delay: i * 0.5,
+              }}
+              style={{
+                left: `${10 + i * 12}%`,
+                top: `${20 + (i % 3) * 30}%`,
+              }}
+            >
+              {i % 4 === 0 ? (
+                <Leaf className="w-8 h-8 text-green-600" />
+              ) : i % 4 === 1 ? (
+                <Waves className="w-6 h-6 text-teal-600" />
+              ) : i % 4 === 2 ? (
+                <Heart className="w-5 h-5 text-pink-400" />
+              ) : (
+                <Sun className="w-7 h-7 text-yellow-500" />
+              )}
+            </motion.div>
           ))}
         </div>
-      </section>
-    );
-  };
 
-  // About Component
-  const About = () => {
-    const { elementRef: ref, isVisible } = useScrollReveal();
-
-    return (
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center scroll-reveal"
+            key={activeSlide}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-              About Subramaniyam Residency
-            </h2>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              Located in the heart of vibrant communities, Subramaniyam Residency offers
-              an exceptional blend of modern luxury and traditional hospitality. Our premium
-              accommodations are designed to provide guests with an unforgettable experience,
-              combining elegant interiors with world-class amenities.
-            </p>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Whether you're visiting for business, pleasure, or special occasions, our
-              dedicated team ensures every moment of your stay is filled with comfort and
-              sophistication. Experience the perfect harmony of luxury and serenity at
-              Subramaniyam Residency.
-            </p>
+            <motion.h1
+              className="text-6xl md:text-8xl font-bold mb-6 text-shadow"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              <span className="gradient-text">{slides[activeSlide].title.split(" ")[0]}</span>
+              <br />
+              <span className="text-gray-800">{slides[activeSlide].title.split(" ").slice(1).join(" ")}</span>
+            </motion.h1>
+
+            <motion.p
+              className="text-xl md:text-2xl text-gray-600 mb-12 font-light"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              {slides[activeSlide].subtitle}
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.8 }}
+            >
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById("spaces")?.scrollIntoView({ behavior: "smooth" })}
+                className="btn-primary text-lg px-8 py-4 shadow-2xl"
+              >
+                Discover Rooms
+                <ArrowRight className="w-5 h-5 ml-2 inline" />
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById("amenities")?.scrollIntoView({ behavior: "smooth" })}
+                className="btn-secondary text-lg px-8 py-4"
+              >
+                Explore Experience
+              </motion.button>
+            </motion.div>
           </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse" />
+          </div>
+        </motion.div>
       </section>
     );
   };
 
-  // Rooms Component
-  const Rooms = () => {
+  // Elegant About Section
+  const About: React.FC = () => {
     const { elementRef: ref, isVisible } = useScrollReveal();
-    const { elementRef: headerRef, isVisible: headerVisible } = useScrollReveal();
-
-    const rooms = [
-      {
-        id: 1,
-        name: "Standard Room",
-        images: [standardRoom, standardRoom2, standardRoom3, standardRoom4, standardRoom5],
-        price: "Placeholder Price",
-        description: "Comfortable and cozy standard room for a pleasant stay.",
-        features: ["Comfort", "Clean", "Essential Amenities"],
-      },
-      {
-        id: 2,
-        name: "Deluxe Room",
-        images: [deluxeBalcony, deluxeBalcony2, deluxeBalcony3, deluxeBalcony4, deluxeBalcony5],
-        price: "Placeholder Price",
-        description: "Premium deluxe room with additional space and amenities.",
-        features: ["Premium Comfort", "Extra Space", "Enhanced Amenities"],
-      },
-      {
-        id: 3,
-        name: "Executive Suite",
-        images: [executiveBalcony, executiveBalcony2, executiveBalcony3, executiveBalcony4, executiveBalcony5],
-        price: "Placeholder Price",
-        description: "Executive suite perfect for business travelers and extended stays.",
-        features: ["Executive Comfort", "Work Space", "Business Amenities"],
-      },
-    ];
 
     return (
-      <section id="rooms" className="py-20 px-4">
-        <div className="container mx-auto">
-          <motion.div
-            ref={headerRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={headerVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16 scroll-reveal"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-              Our Rooms & Suites
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Choose from our selection of elegantly designed rooms and suites, each crafted
-              to provide maximum comfort and luxury.
-            </p>
-          </motion.div>
+      <section className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <motion.div
+              ref={ref}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -50 }}
+              transition={{ duration: 0.8 }}
+              className="animate-slide-in-left"
+            >
+              <div className="space-y-6">
+                <motion.div
+                  initial={{ scale: 0.9 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium"
+                >
+                  <Leaf className="w-4 h-4 mr-2" />
+                  Nature's Luxury
+                </motion.div>
 
-          <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {rooms.map((room, index) => (
-              <motion.div
-                key={room.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                className={`overflow-hidden bg-card border border-border hover-glow-purple rounded-lg scroll-reveal ${
-                  isVisible ? 'scroll-visible' : ''
-                }`}
-                style={{ transitionDelay: `${index * 0.1}s` }}
-              >
-                <div className="relative">
-                  <RoomCarousel images={room.images} roomName={room.name} />
-                  <div className="absolute top-4 right-4 bg-accent text-accent-foreground px-4 py-2 rounded-full font-bold z-10">
-                    {room.price}
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+                  Where <span className="gradient-text">Nature</span> Meets Luxury
+                </h2>
+
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Subramaniyam Residency embodies the perfect harmony between modern comfort and
+                  natural serenity. Our thoughtfully designed spaces invite you to reconnect with
+                  nature while enjoying contemporary luxuries.
+                </p>
+
+                <div className="grid grid-cols-2 gap-6 pt-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold gradient-text">500+</div>
+                    <div className="text-gray-600">Happy Guests</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold gradient-text">98%</div>
+                    <div className="text-gray-600">Satisfaction</div>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-foreground text-xl font-semibold mb-2">{room.name}</h3>
-                  <p className="text-muted-foreground mb-4">
-                    {room.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {room.features.map((feature) => (
-                      <span
-                        key={feature}
-                        className="text-xs bg-secondary text-secondary-foreground px-3 py-1 rounded-full"
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => navigate('/booking')}
-                    className="w-full bg-primary hover:bg-primary-glow text-primary-foreground hover-glow-purple px-4 py-2 rounded-md transition-all duration-300"
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative animate-slide-in-right"
+            >
+              <div className="relative">
+                <div className="grid grid-cols-1 gap-4">
+                  <motion.div
+                    className="aspect-square bg-gradient-to-br from-green-400 to-teal-500 rounded-2xl p-8 flex items-center justify-center shadow-lg"
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    Book Now
-                  </button>
+                    <Mountain className="w-20 h-20 text-white" />
+                  </motion.div>
+
+                  <motion.div
+                    className="aspect-square bg-gradient-to-br from-teal-400 to-cyan-500 rounded-2xl p-8 flex items-center justify-center shadow-lg"
+                    whileHover={{ scale: 1.05, rotate: -5 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                  >
+                    <Waves className="w-20 h-20 text-white" />
+                  </motion.div>
                 </div>
-              </motion.div>
-            ))}
+
+                {/* Floating Card */}
+                <motion.div
+                  className="absolute -top-4 -right-4 bg-white p-4 rounded-xl shadow-xl"
+                  animate={{ rotate: [-2, 2, -2] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <div className="flex items-center space-x-2">
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                  </div>
+                  <p className="text-sm font-medium mt-1">Exceptional Experience</p>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
     );
   };
 
-  // Amenities Component
-  const Amenities = () => {
-    const { elementRef: ref, isVisible } = useScrollReveal();
+  // Interactive Spaces Section
+  const Spaces: React.FC = () => {
     const { elementRef: headerRef, isVisible: headerVisible } = useScrollReveal();
+    const { elementRef: spacesRef, isVisible: spacesVisible } = useScrollReveal();
 
-    const amenities = [
-      { icon: FaConciergeBell, title: "24/7 Concierge", description: "Round-the-clock assistance for all your needs" },
-      { icon: FaBroom, title: "Room Service", description: "24-hour in-room dining service at your convenience" },
-      { icon: FaSnowflake, title: "Power Backup", description: "Uninterrupted power supply with backup generators" },
-      { icon: FaPhone, title: "Security", description: "24/7 security with trained personnel and surveillance" },
-      { icon: FaWifi, title: "Wi-Fi", description: "High-speed wireless internet access throughout the property" },
-      { icon: FaCar, title: "Free Parking", description: "Secure and convenient parking facilities for guests" },
-      { icon: FaSkyatlas, title: "Terrace View", description: "Stunning terrace views overlooking the surrounding landscape" },
-      { icon: FaGopuram, title: "Near to Temple", description: "Conveniently located close to sacred temples and spiritual sites" },
+    const spaces = [
+      {
+        id: 1,
+        name: "Tranquil Suite",
+        icon: Home,
+        features: ["Forest View", "Private Balcony", "Spa Bathroom"],
+        price: "₹2,500/night",
+        description: "Awaken to bird songs and mountain breezes",
+      },
+      {
+        id: 2,
+        name: "Zen Retreat",
+        icon: Heart,
+        features: ["Meditation Space", "Herbal Garden", "Natural Lighting"],
+        price: "₹3,200/night",
+        description: "Find inner peace in minimalist elegance",
+      },
+      {
+        id: 3,
+        name: "Nature's Haven",
+        icon: Leaf,
+        features: ["Wildlife Viewing", "Outdoor Shower", "Organic Bedding"],
+        price: "₹2,800/night",
+        description: "Immerse yourself in natural surroundings",
+      },
     ];
 
     return (
-      <section id="amenities" className="py-20 px-4 bg-card/50">
-        <div className="container mx-auto">
+      <section id="spaces" className="py-24 px-6 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          {/* Header */}
           <motion.div
             ref={headerRef}
             initial={{ opacity: 0, y: 30 }}
-            animate={headerVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16 scroll-reveal"
+            animate={{ opacity: headerVisible ? 1 : 0, y: headerVisible ? 0 : 30 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16 animate-slide-up"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-              World-Class Amenities
+            <motion.div
+              className="inline-flex items-center px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-medium mb-4"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Signature Spaces
+            </motion.div>
+
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Choose Your <span className="gradient-text">Sanctuary</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Indulge in our comprehensive range of facilities designed to make your stay
-              comfortable and memorable.
+
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Each space is thoughtfully designed to offer unique experiences
+              that celebrate nature's beauty and serenity.
             </p>
           </motion.div>
 
-          <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Spaces Grid */}
+          <div ref={spacesRef} className="grid md:grid-cols-3 gap-8">
+            {spaces.map((space, index) => {
+              const Icon = space.icon;
+              return (
+                <motion.div
+                  key={space.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: spacesVisible ? 1 : 0, y: spacesVisible ? 0 : 50 }}
+                  transition={{ delay: index * 0.2, duration: 0.8 }}
+                  whileHover={{ y: -10 }}
+                  className="card-hover group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-green-300 transition-all duration-500 shadow-lg hover:shadow-2xl"
+                >
+                  <div className="text-center mb-6">
+                    <motion.div
+                      className="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300"
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <Icon className="w-8 h-8 text-white" />
+                    </motion.div>
+
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{space.name}</h3>
+                    <p className="text-lg font-semibold gradient-text mb-4">{space.price}</p>
+                    <p className="text-gray-600 mb-6">{space.description}</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {space.features.map((feature, i) => (
+                      <motion.div
+                        key={feature}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
+                        className="flex items-center space-x-3"
+                      >
+                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        <span className="text-gray-700">{feature}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate('/booking')}
+                    className="w-full mt-6 btn-primary"
+                  >
+                    Reserve Now
+                  </motion.button>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    );
+  };
+
+  // Modern Amenities Section
+  const Amenities: React.FC = () => {
+    const { elementRef: ref, isVisible } = useScrollReveal();
+
+    const amenities = [
+      { icon: FaTree, title: "Organic Gardens", description: "Fresh herbs and seasonal produce" },
+      { icon: FaWater, title: "Natural Hot Springs", description: "Therapeutic mineral waters" },
+      { icon: FaMountain, title: "Hiking Trails", description: "Guided nature explorations" },
+      { icon: FaSpa, title: "Wellness Center", description: "Yoga and meditation spaces" },
+      { icon: FaWifi, title: "Forest Network", description: "High-speed connectivity outdoors" },
+      { icon: FaCoffee, title: "Artisan Coffee", description: "Single-origin beans, expertly brewed" },
+    ];
+
+    return (
+      <section id="amenities" className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              className="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-4"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Waves className="w-4 h-4 mr-2" />
+              Living Essence
+            </motion.div>
+
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Curated <span className="gradient-text">Experiences</span>
+            </h2>
+
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Every detail is thoughtfully designed to enhance your connection
+              with nature and elevate your senses.
+            </p>
+          </motion.div>
+
+          <div ref={ref} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {amenities.map((amenity, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isVisible ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -10 }}
-                className={`bg-card border border-border rounded-lg p-6 text-center hover-glow-purple group scroll-reveal ${
-                  isVisible ? 'scroll-visible' : ''
-                }`}
-                style={{ transitionDelay: `${index * 0.1}s` }}
+                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                animate={isVisible ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+                transition={{ delay: index * 0.15, duration: 0.6, type: "spring" }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative bg-white rounded-2xl p-8 border border-gray-200 hover:border-green-300 transition-all duration-500 hover:shadow-xl"
               >
+                <div className="flex items-center space-x-4">
+                  <motion.div
+                    className="w-14 h-14 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                    whileHover={{ rotate: 15 }}
+                  >
+                    <amenity.icon className="w-7 h-7 text-white" />
+                  </motion.div>
+
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">{amenity.title}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">{amenity.description}</p>
+                  </div>
+                </div>
+
+                {/* Hover Effect Overlay */}
                 <motion.div
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                  className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
-                  style={{
-                    background: "var(--gradient-blue-white)",
-                  }}
-                >
-                  <amenity.icon className="text-3xl text-primary-foreground" />
-                </motion.div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  {amenity.title}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {amenity.description}
-                </p>
+                  className="absolute inset-0 bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  initial={false}
+                />
               </motion.div>
             ))}
           </div>
@@ -655,152 +672,100 @@ const Index = () => {
     );
   };
 
-  // Tours Component
-  const Tours = () => {
+  // Exploration Section
+  const Tours: React.FC = () => {
     const { elementRef: ref, isVisible } = useScrollReveal();
-    const { elementRef: headerRef, isVisible: headerVisible } = useScrollReveal();
 
-    const tours = [
+    const destinations = [
       {
-        id: 1,
-        name: "Arunachaleswarar Temple",
-        distance: "2 km",
-        description: "Ancient Hindu temple dedicated to Lord Shiva, one of the Pancha Bhoota Stalas representing fire.",
-        highlights: ["Spiritual significance", "Ancient architecture", "Daily rituals"],
-      },
-      {
-        id: 2,
-        name: "Girivalam Path",
-        distance: "14 km circuit",
-        description: "Sacred circumambulation path around Arunachala Hill, walked by thousands of devotees.",
-        highlights: ["Spiritual walk", "Scenic views", "Temple stops"],
-      },
-      {
-        id: 3,
-        name: "Ramana Maharshi Ashram",
+        name: "Sacred Mountain",
         distance: "3 km",
-        description: "Peaceful ashram of the renowned sage Ramana Maharshi, a center for meditation and self-inquiry.",
-        highlights: ["Meditation center", "Peaceful atmosphere", "Spiritual teachings"],
+        duration: "2-3 hours",
+        difficulty: "Moderate",
+        highlights: ["Panoramic views", "Spiritual sites", "Photography"],
       },
       {
-        id: 4,
-        name: "Sathanur Dam",
-        distance: "25 km",
-        description: "Beautiful reservoir with scenic views, perfect for picnics and nature photography.",
-        highlights: ["Scenic beauty", "Water activities", "Photography"],
+        name: "Crystal Lake",
+        distance: "8 km",
+        duration: "4-5 hours",
+        difficulty: "Easy",
+        highlights: ["Swimming", "Picnic spots", "Wildlife"],
+      },
+      {
+        name: "Ancient Grove",
+        distance: "12 km",
+        duration: "6-7 hours",
+        difficulty: "Challenging",
+        highlights: ["Historic ruins", "Meditation", "Adventure"],
       },
     ];
 
     return (
-      <section id="tours" className="py-20 px-4">
-        <div className="container mx-auto">
+      <section className="py-24 px-6 bg-white">
+        <div className="container mx-auto max-w-6xl">
           <motion.div
-            ref={headerRef}
             initial={{ opacity: 0, y: 30 }}
-            animate={headerVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16 scroll-reveal"
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-              Nearby Attractions
+            <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
+              <Mountain className="w-4 h-4 mr-2" />
+              Nature Adventures
+            </div>
+
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Explore Beyond <span className="gradient-text">Boundaries</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore the spiritual and natural wonders around Tiruvannamalai during your stay.
+
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover the natural wonders and spiritual landmarks that surround our sanctuary.
             </p>
           </motion.div>
 
-          <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {tours.map((tour, index) => (
-              <motion.div
-                key={tour.id}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={isVisible ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: index * 0.2, duration: 0.6 }}
-                className={`bg-card border border-border hover-glow-blue h-full rounded-lg p-6 scroll-reveal ${
-                  isVisible ? 'scroll-visible' : ''
-                }`}
-                style={{ transitionDelay: `${index * 0.2}s` }}
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-foreground text-2xl font-semibold">{tour.name}</h3>
-                  <span className="text-accent font-semibold text-sm bg-accent/10 px-3 py-1 rounded-full">
-                    {tour.distance}
-                  </span>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  {tour.description}
-                </p>
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-foreground">Highlights:</p>
-                  <ul className="space-y-1">
-                    {tour.highlights.map((highlight, i) => (
-                      <li key={i} className="text-sm text-muted-foreground flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-accent mr-2" />
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  };
-
-  // Gallery Component
-  const Gallery = () => {
-    const { elementRef: ref, isVisible } = useScrollReveal();
-    const { elementRef: headerRef, isVisible: headerVisible } = useScrollReveal();
-
-    const images = [
-      hero1,
-      hero2,
-      deluxeBalcony,
-      executiveBalcony,
-      familyBalcony,
-      presidentialBalcony,
-    ];
-
-    return (
-      <section id="gallery" className="py-20 px-4 bg-card/50">
-        <div className="container mx-auto">
-          <motion.div
-            ref={headerRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={headerVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16 scroll-reveal"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-              Gallery
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Glimpse into the luxury and elegance that awaits you at Subramaniyam Residency.
-            </p>
-          </motion.div>
-
-          <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {images.map((image, index) => (
+          <div ref={ref} className="grid md:grid-cols-3 gap-8">
+            {destinations.map((dest, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isVisible ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.05 }}
-                className={`relative h-64 overflow-hidden rounded-lg cursor-pointer group scroll-reveal ${
-                  isVisible ? 'scroll-visible' : ''
-                }`}
-                style={{ transitionDelay: `${index * 0.1}s` }}
+                initial={{ opacity: 0, y: 50 }}
+                animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: index * 0.2, duration: 0.8 }}
+                className="relative group"
               >
-                <img
-                  src={image}
-                  alt={`Gallery ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                  <p className="text-foreground font-semibold">Subramaniyam Residency</p>
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-gray-200 hover:border-blue-300 transition-all duration-500 card-hover">
+                  <div className="text-center mb-6">
+                    <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mb-3 ${
+                      dest.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                      dest.difficulty === 'Moderate' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {dest.difficulty}
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{dest.name}</h3>
+                    <div className="flex justify-between text-sm text-gray-600 mb-4">
+                      <span>{dest.distance}</span>
+                      <span>{dest.duration}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-6">
+                    <p className="font-semibold text-gray-900 mb-2">Highlights:</p>
+                    {dest.highlights.map((highlight, i) => (
+                      <div key={i} className="flex items-center space-x-2 text-sm text-gray-700">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span>{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-medium"
+                  >
+                    Learn More
+                  </motion.button>
                 </div>
               </motion.div>
             ))}
@@ -810,302 +775,128 @@ const Index = () => {
     );
   };
 
-  // Contact Component
-  const Contact = () => {
-    const { elementRef: ref, isVisible } = useScrollReveal();
-    const { elementRef: headerRef, isVisible: headerVisible } = useScrollReveal();
-    const [formData, setFormData] = useState({
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitMessage, setSubmitMessage] = useState("");
-
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setIsSubmitting(true);
-      setSubmitMessage("");
-
-      try {
-        // Simulate form submission (you can replace this with actual API call)
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        toast.success("Thank you! We'll get back to you soon.");
-        setSubmitMessage("Thank you for contacting us! We'll get back to you within 24 hours.");
-        setFormData({ name: "", email: "", phone: "", message: "" });
-
-        // Clear success message after 5 seconds
-        setTimeout(() => setSubmitMessage(""), 5000);
-      } catch (error) {
-        toast.error("Failed to send message. Please try again.");
-        setSubmitMessage("Failed to send message. Please try again.");
-      } finally {
-        setIsSubmitting(false);
-      }
-    };
-
+  // Gallery Section
+  const Gallery: React.FC = () => {
+    // Simplified gallery for this unique design
     return (
-      // reduced vertical spacing so header + map/form fit better on screen
-      <section id="contact" className="py-12 px-4">
-        <div className="container mx-auto">
+      <section id="gallery" className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto max-w-6xl">
           <motion.div
-            ref={headerRef}
-            initial={{ opacity: 0, y: 20 }}
-            animate={headerVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-6 scroll-reveal"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-2xl md:text-3xl font-bold mb-2 gradient-text">
-              Contact Us
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Moments <span className="gradient-text">Captured</span>
             </h2>
-            <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-              Have questions or need assistance? We're here to help make your stay exceptional.
-            </p>
           </motion.div>
 
-          <div ref={ref} className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${isVisible ? 'scroll-visible' : ''}`}>
-            {/* Google Maps - slightly reduced height to fit better */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={isVisible ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5 }}
-              className="order-1 lg:order-1"
-            >
-              {/* Map height uses viewport units to fit screen: mobile 40vh, large screens 60vh */}
-              <div className="rounded-lg overflow-hidden h-[40vh] lg:h-[80vh] border border-border">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1208.7616621421164!2d79.07363723495936!3d12.229721722062825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bacc177aa9554ab%3A0xcf9414977c2c1018!2sSiva%20Subramaniyar%20Residency!5e1!3m2!1sen!2sin!4v1763486870042!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-            </motion.div>
-
-            {/* Contact Form - info cards condensed, form padding reduced */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={isVisible ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5 }}
-              className="order-2 lg:order-2"
-            >
-              {/* Contact Information Cards - compact */}
-              <div className="space-y-3 mb-4">
-                <a
-                  href="https://maps.google.com/?q=123+Temple+Road,+Near+Arunachaleswarar+Temple,+Tiruvannamalai,+Tamil+Nadu+606601"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block bg-card border border-border rounded-lg p-3 hover-glow-purple transition-all duration-300 cursor-pointer"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "var(--gradient-blue-white)" }}>
-                      <FaMapMarkerAlt className="text-sm text-primary-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-foreground mb-0.5">Address</h3>
-                      <p className="text-xs text-muted-foreground leading-tight hover:text-accent transition-colors">
-                        107, Ramalinganar St, Tiruvennanallur, <br />Tiruvannamalai, Tamil Nadu 606601
-                      </p>
-                    </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                whileHover={{ scale: 1.1 }}
+                className="aspect-square bg-gradient-to-br from-green-200 to-teal-300 rounded-xl overflow-hidden cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    {i % 4 === 0 ? <Leaf className="w-6 h-6 text-white" /> :
+                     i % 4 === 1 ? <Mountain className="w-6 h-6 text-white" /> :
+                     i % 4 === 2 ? <Waves className="w-6 h-6 text-white" /> :
+                     <Heart className="w-6 h-6 text-white" />}
                   </div>
-                </a>
-
-                <a
-                  href="tel:+919876543210"
-                  className="block bg-card border border-border rounded-lg p-3 hover-glow-purple transition-all duration-300 cursor-pointer"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "var(--gradient-blue-white)" }}>
-                      <FaPhone className="text-sm text-primary-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-foreground mb-0.5">Phone</h3>
-                      <p className="text-xs text-muted-foreground leading-tight hover:text-accent transition-colors">
-                        +91 98765 43210
-                      </p>
-                    </div>
-                  </div>
-                </a>
-
-                <a
-                  href="mailto:info@kousthubamgrand.com"
-                  className="block bg-card border border-border rounded-lg p-3 hover-glow-purple transition-all duration-300 cursor-pointer"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "var(--gradient-blue-white)" }}>
-                      <FaEnvelope className="text-sm text-primary-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-foreground mb-0.5">Email</h3>
-                      <p className="text-xs text-muted-foreground leading-tight hover:text-accent transition-colors">
-                        info@kousthubamgrand.com
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-
-              {/* Success Message */}
-              {submitMessage && (
-                <div className={`mb-4 p-3 rounded-lg border ${
-                  submitMessage.includes('Thank you')
-                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
-                    : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
-                }`}>
-                  <p className="text-sm font-medium">{submitMessage}</p>
                 </div>
-              )}
-
-              {/* Submit Button Loading State */}
-              {isSubmitting && (
-                <div className="flex justify-center mb-4">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="bg-card border border-border rounded-lg p-4 space-y-4 min-h-[20rem] lg:min-h-[28rem]">
-                <div>
-                  <label className="block text-xs font-medium text-foreground mb-1">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-2 py-2 bg-background border border-border text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm"
-                    placeholder="Your name"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-foreground mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-2 py-2 bg-background border border-border text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm"
-                    placeholder="your@email.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-foreground mb-1">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-2 py-2 bg-background border border-border text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm"
-                    placeholder="+91 98765 43210"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-foreground mb-1">
-                    Message
-                  </label>
-                  <textarea
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-2 py-2 bg-background border border-border text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-ring min-h-24 resize-none text-sm"
-                    placeholder="How can we help you?"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-primary-glow text-primary-foreground hover-glow-purple px-3 py-2 rounded-md transition-all duration-300 font-medium text-sm"
-                >
-                  Send Message
-                </button>
-              </form>
-            </motion.div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
     );
   };
-// ...existing code...
 
-  // Footer Component
-  const Footer = () => {
+  // Contact Section
+  const Contact: React.FC = () => {
+    const { elementRef: ref, isVisible } = useScrollReveal();
+    const [showForm, setShowForm] = useState(false);
+
     return (
-      <footer className="bg-card border-t border-border py-12 px-4">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h3 className="text-2xl font-bold gradient-text mb-4">
-                Subramaniyam Residency
-              </h3>
-              <p className="text-muted-foreground">
-                Experience luxury and comfort in vibrant communities.
-              </p>
-            </div>
+      <section id="contact" className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Begin Your <span className="gradient-text">Journey</span>
+            </h2>
 
-            <div>
-              <h4 className="text-lg font-semibold text-foreground mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#rooms" className="text-muted-foreground hover:text-accent transition-colors">
-                    Rooms & Suites
-                  </a>
-                </li>
-                <li>
-                  <a href="#amenities" className="text-muted-foreground hover:text-accent transition-colors">
-                    Amenities
-                  </a>
-                </li>
-                <li>
-                  <a href="#tours" className="text-muted-foreground hover:text-accent transition-colors">
-                    Nearby Tours
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="text-muted-foreground hover:text-accent transition-colors">
-                    Contact Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-foreground mb-4">Follow Us</h4>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary hover:bg-primary transition-colors flex items-center justify-center">
-                  <FaFacebook className="text-foreground" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary hover:bg-primary transition-colors flex items-center justify-center">
-                  <FaInstagram className="text-foreground" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary hover:bg-primary transition-colors flex items-center justify-center">
-                  <FaTwitter className="text-foreground" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary hover:bg-primary transition-colors flex items-center justify-center">
-                  <FaLinkedin className="text-foreground" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-8 text-center">
-            <p className="text-muted-foreground">
-              © 2025 Subramaniyam Residency. All rights reserved.
+            <p className="text-xl text-gray-600 mb-8">
+              Ready to experience nature's luxury? Let's connect and make your stay unforgettable.
             </p>
-          </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowForm(!showForm)}
+                className="btn-primary px-8 py-4 text-lg"
+              >
+                Connect With Us
+              </motion.button>
+            </div>
+          </motion.div>
+
+          <AnimatePresence>
+            {showForm && (
+              <motion.div
+                ref={ref}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={isVisible ? { opacity: 1, y: 0, scale: 1 } : {}}
+                exit={{ opacity: 0, y: 50, scale: 0.9 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200"
+              >
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Let's Get In Touch</h3>
+                  <p className="text-gray-600">We're here to make your experience extraordinary</p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8 text-center">
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+                      <Phone className="w-6 h-6 text-green-600" />
+                    </div>
+                    <h4 className="font-semibold mb-1">Call Us</h4>
+                    <p className="text-gray-600 text-sm">+91 98765 43210</p>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                      <Mail className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <h4 className="font-semibold mb-1">Email Us</h4>
+                    <p className="text-gray-600 text-sm">hello@subramaniyam.com</p>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-3">
+                      <MapPin className="w-6 h-6 text-teal-600" />
+                    </div>
+                    <h4 className="font-semibold mb-1">Visit Us</h4>
+                    <p className="text-gray-600 text-sm">Tiruvannamalai, TN</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </footer>
+      </section>
     );
   };
 
@@ -1120,12 +911,71 @@ const Index = () => {
           <Navigation />
           <Hero />
           <About />
-          <Rooms />
+          <Spaces />
           <Amenities />
           <Tours />
           <Gallery />
           <Contact />
-          <Footer />
+
+          {/* Footer */}
+          <footer className="bg-gray-900 text-white py-16 px-6">
+            <div className="container mx-auto max-w-6xl">
+              <div className="grid md:grid-cols-4 gap-8">
+                <div className="md:col-span-2">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center">
+                      <Leaf className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-2xl font-bold">Subramaniyam Residency</span>
+                  </div>
+                  <p className="text-gray-300 mb-6">
+                    Where nature meets luxury in perfect harmony. Experience the serenity
+                    of Tiruvannamalai's natural beauty.
+                  </p>
+                  <div className="flex space-x-4">
+                    {['facebook', 'instagram', 'twitter'].map((social) => (
+                      <motion.div
+                        key={social}
+                        whileHover={{ scale: 1.1 }}
+                        className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors"
+                      >
+                        <div className="w-5 h-5 bg-white rounded-sm"></div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+                  <ul className="space-y-2">
+                    {['Discover', 'Spaces', 'Essence', 'Exploration', 'Gallery', 'Connect'].map((link) => (
+                      <li key={link}>
+                        <a href={`#${link.toLowerCase()}`} className="text-gray-300 hover:text-white transition-colors">
+                          {link}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-semibold mb-4">Support</h4>
+                  <ul className="space-y-2">
+                    <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Help Center</a></li>
+                    <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
+                    <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Contact Support</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-700 pt-8 text-center mt-12">
+                <p className="text-gray-400">
+                  © 2025 Subramaniyam Residency. Embracing nature's beauty, one guest at a time.
+                </p>
+              </div>
+            </div>
+          </footer>
         </div>
       )}
     </>
